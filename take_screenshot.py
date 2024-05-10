@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from skpy import Skype
 import os
 from dotenv import load_dotenv
+import time
 
 def upload_to_skype(sk, group_id, filename, delete_after=False):
     """
@@ -22,7 +23,7 @@ def upload_to_skype(sk, group_id, filename, delete_after=False):
     while retries > 0:
         try:
             chat = sk.chats[group_id]
-            chat.send_file(open(filename, "rb"), filename)
+            chat.sendFile(open(filename, "rb"), filename)
             if os.path.exists(filename) and delete_after:
                 os.remove(filename)
                 print('File deleted successfully!')
@@ -62,10 +63,10 @@ if __name__ == "__main__":
     skype_group_id = os.getenv("skype_group_id")
 
     # Improved readability with descriptive variable names
-    sk = Skype(username=skype_username, password=skype_password)
+    sk = Skype(skype_username, skype_password)
     driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()))
 
-    url = "https://google.com"
+    url = "https://facebook.com"
     screenshot_filepath = take_screenshot(url, driver)
     upload_to_skype(sk, skype_group_id, screenshot_filepath)
     driver.quit()
